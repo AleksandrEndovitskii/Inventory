@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using InventoryItems;
 using UnityEngine;
+using Utilities;
 
 /*
 Дизайнер, не владеющий программированием, должен иметь возможность настраивать какие цвета доступны игроку.
@@ -11,9 +12,19 @@ using UnityEngine;
 
 namespace Services
 {
-    public class InventoryService : MonoBehaviour
+    public class InventoryService : IInitializable, IUninitializable
     {
-        private List<InventoryColor> _inventoryColors = new List<InventoryColor>();
+        private List<InventoryColor> _inventoryColors;
+
+        public void Initialize()
+        {
+            _inventoryColors = new List<InventoryColor>();
+        }
+
+        public void Uninitialize()
+        {
+            _inventoryColors = null;
+        }
 
         public bool Add(InventoryColor inventoryColor)
         {
