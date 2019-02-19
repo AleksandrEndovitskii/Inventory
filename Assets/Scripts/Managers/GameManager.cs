@@ -45,9 +45,9 @@ namespace Managers
 
         public void Initialize()
         {
-            UserInterfaceManager.Initialize();
-
             InventoryService.Initialize();
+
+            UserInterfaceManager.Initialize();
         }
 
         public void Uninitialize()
