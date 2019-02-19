@@ -19,7 +19,7 @@ namespace Managers
             get { return this.gameObject.GetComponent<UserInterfaceManager>(); }
         }
 
-        public InventoryService InventoryService;
+        public InventoryService InventoryService = new InventoryService();
 
         private void Awake()
         {

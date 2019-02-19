@@ -14,34 +14,44 @@ namespace Services
 {
     public class InventoryService : IInitializable, IUninitializable
     {
-        private List<InventoryColor> _inventoryColors;
+        public List<InventoryColor> Items;
 
         public void Initialize()
         {
-            _inventoryColors = new List<InventoryColor>();
+            Items = new List<InventoryColor>();
+
+            Add(new InventoryColor(Color.red));
+            Add(new InventoryColor(Color.green));
+            Add(new InventoryColor(Color.blue));
+            Add(new InventoryColor(Color.black));
+            Add(new InventoryColor(Color.black));
+            Add(new InventoryColor(Color.white));
+            Add(new InventoryColor(Color.white));
         }
 
         public void Uninitialize()
         {
-            _inventoryColors = null;
+            Items.Clear();
+
+            Items = null;
         }
 
         public bool Add(InventoryColor inventoryColor)
         {
-            if (_inventoryColors.Contains(inventoryColor))
+            if (Items.Contains(inventoryColor))
             {
                 Debug.Log("Inventory already contain this color");
 
                 return false;
             }
 
-            _inventoryColors.Add(inventoryColor);
+            Items.Add(inventoryColor);
             return true;
         }
 
         public bool Remove(InventoryColor inventoryColor)
         {
-            var result = _inventoryColors.Remove(inventoryColor);
+            var result = Items.Remove(inventoryColor);
 
             if (!result)
             {

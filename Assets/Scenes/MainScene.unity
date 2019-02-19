@@ -261,6 +261,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9005892701457999475, guid: 9acd426784573d642aca4a0f778b8471,
+        type: 3}
+      propertyPath: inventoryViewPrefab
+      value: 
+      objectReference: {fileID: 7396615755700661636, guid: 0fca622d8af781044ad2ccb5a806142c,
+        type: 3}
+    - target: {fileID: 9005892701457999475, guid: 9acd426784573d642aca4a0f778b8471,
+        type: 3}
+      propertyPath: canvas
+      value: 
+      objectReference: {fileID: 1390966134}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9acd426784573d642aca4a0f778b8471, type: 3}
 --- !u!1 &964162099
