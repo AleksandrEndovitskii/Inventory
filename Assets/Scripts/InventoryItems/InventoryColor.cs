@@ -11,9 +11,16 @@ namespace InventoryItems
             Color = color;
         }
 
-        protected bool Equals(InventoryColor other)
+        public override bool Equals(object other)
         {
-            return Color.Equals(other.Color);
+            var item = other as InventoryColor;
+
+            if (item == null)
+            {
+                return false;
+            }
+
+            return Color.Equals(item.Color);
         }
 
         public override int GetHashCode()
