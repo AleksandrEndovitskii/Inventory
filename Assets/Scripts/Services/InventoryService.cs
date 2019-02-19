@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using InventoryItems;
 using UnityEngine;
 using Utilities;
@@ -14,11 +16,11 @@ namespace Services
 {
     public class InventoryService : IInitializable, IUninitializable
     {
-        public List<InventoryColor> Items;
+        public ObservableCollection<IInventoryItem> InventoryItems;
 
         public void Initialize()
         {
-            Items = new List<InventoryColor>();
+            InventoryItems = new ObservableCollection<IInventoryItem>();
 
             Add(new InventoryColor(Color.red));
             Add(new InventoryColor(Color.green));
@@ -31,27 +33,27 @@ namespace Services
 
         public void Uninitialize()
         {
-            Items.Clear();
+            InventoryItems.Clear();
 
-            Items = null;
+            InventoryItems = null;
         }
 
         public bool Add(InventoryColor inventoryColor)
         {
-            if (Items.Contains(inventoryColor))
+            if (InventoryItems.Contains(inventoryColor))
             {
                 Debug.Log("Inventory already contain this color");
 
                 return false;
             }
 
-            Items.Add(inventoryColor);
+            InventoryItems.Add(inventoryColor);
             return true;
         }
 
         public bool Remove(InventoryColor inventoryColor)
         {
-            var result = Items.Remove(inventoryColor);
+            var result = InventoryItems.Remove(inventoryColor);
 
             if (!result)
             {
