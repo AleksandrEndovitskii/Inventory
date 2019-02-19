@@ -1,4 +1,5 @@
-﻿using InventoryItems;
+﻿using System;
+using InventoryItems;
 using UnityEngine;
 using UnityEngine.UI;
 //using Utilities;
@@ -7,26 +8,33 @@ namespace UserInterface
 {
     public class InventoryItemView : MonoBehaviour //,IInitializable, IUninitializable
     {
+        public Action<InventoryItemView> WasSelected = delegate { };
+
         [SerializeField]
         private Image image;
 
-        private IInventoryItem _inventoryItem;
+        public IInventoryItem InventoryItem;
 
         public void Initialize(IInventoryItem inventoryItem)
         {
-            _inventoryItem = inventoryItem;
+            this.InventoryItem = inventoryItem;
 
             Redraw();
         }
 
         public void Redraw()
         {
-            image.color = ((InventoryColor)_inventoryItem).Color; //TODO
+            image.color = ((InventoryColor)InventoryItem).Color; //TODO
         }
 
         public void Uninitialize()
         {
             //
+        }
+
+        public void OnClick()
+        {
+            WasSelected.Invoke(this);
         }
     }
 }
