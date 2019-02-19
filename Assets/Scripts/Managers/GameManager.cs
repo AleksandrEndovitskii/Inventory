@@ -8,6 +8,7 @@ using Utilities;
 
 namespace Managers
 {
+    [RequireComponent(typeof(UserInterfaceManager))]
     public class GameManager : MonoBehaviour , IInitializable, IUninitializable
     {
         // static instance of GameManager which allows it to be accessed by any other script 
