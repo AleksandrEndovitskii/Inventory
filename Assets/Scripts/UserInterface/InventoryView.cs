@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Specialized;
 using InventoryItems;
 using Managers;
 using UnityEngine;
@@ -50,12 +49,12 @@ namespace UserInterface
         {
             CreateContent();
 
-            GameManager.Instance.InventoryService.InventoryItems.CollectionChanged += InventoryItemsOnCollectionChanged;
+            GameManager.Instance.InventoryService.ContentChanged += InventoryItemsOnCollectionChanged;
         }
 
         public void Uninitialize()
         {
-            GameManager.Instance.InventoryService.InventoryItems.CollectionChanged -= InventoryItemsOnCollectionChanged;
+            GameManager.Instance.InventoryService.ContentChanged -= InventoryItemsOnCollectionChanged;
 
             ClearContent();
         }
@@ -80,7 +79,11 @@ namespace UserInterface
 
         public void OnSaveColorButtonClick()
         {
-            // TODO: work stopped here - resume a implementing of saving changed color
+            // TODO: test demo implementation - add correct implementation in future
+            _selectedColor = ((InventoryColor)SelectedInventoryItem).Color;
+            _selectedColor = new Color((_selectedColor.r + 0.1f) % 1, _selectedColor.g, _selectedColor.b, _selectedColor.a);
+            Debug.Log("Trying to save selected color " + _selectedColor);
+            Debug.Log("To replace  " + ((InventoryColor)SelectedInventoryItem).Color);
             //((InventoryColor)SelectedInventoryItem).Color = _selectedColor;
             var selectedInventoryItemChangedColor = ((InventoryColor)SelectedInventoryItem).TryChangeColor(_selectedColor);
             if (selectedInventoryItemChangedColor)
@@ -126,7 +129,7 @@ namespace UserInterface
             _inventoryItemViewInstances = null; // TODO: do not required?
         }
 
-        private void InventoryItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void InventoryItemsOnCollectionChanged(IEnumerable<IInventoryItem> inventoryItems)
         {
             //TODO: not optimized
             ClearContent();

@@ -5,30 +5,27 @@ namespace InventoryItems
 {
     public class InventoryColor : IInventoryItem
     {
-        //public Action<InventoryColor> InventoryColorChanged = delegate { };
+        public Action<InventoryColor> InventoryColorChanged = delegate { };
 
-        //private Color _color;
+        private Color _color;
         public Color Color
         {
-            get;
-            private set;
-        }
-        //{
-        //    get
-        //    {
-        //        return _color;
-        //    }
-        //    set
-        //    {
-        //        var bufferValue = _color;
-        //        _color = value;
+            get
+            {
+                return _color;
+            }
+            private set
+            {
+                var bufferValue = _color;
+                _color = value;
 
-        //        if (_color != bufferValue)
-        //        {
-        //            InventoryColorChanged.Invoke(this);
-        //        }
-        //    }
-        //}
+                if (_color != bufferValue)
+                {
+                    Debug.Log(string.Format("Inventory color changed from {0} to {1}", bufferValue, _color));
+                    InventoryColorChanged.Invoke(this);
+                }
+            }
+        }
 
         public InventoryColor(Color color)
         {

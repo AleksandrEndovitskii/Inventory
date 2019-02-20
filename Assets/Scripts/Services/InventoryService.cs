@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using InventoryItems;
 using UnityEngine;
 using Utilities;
@@ -14,11 +17,14 @@ namespace Services
 {
     public class InventoryService : IInitializable, IUninitializable
     {
+        public Action<IEnumerable<IInventoryItem>> ContentChanged = delegate { };
+
         public ObservableCollection<IInventoryItem> InventoryItems;
 
         public void Initialize()
         {
             InventoryItems = new ObservableCollection<IInventoryItem>();
+            InventoryItems.CollectionChanged += InventoryItemsOnCollectionChanged;
 
             TryAdd(new InventoryColor(Color.red));
             TryAdd(new InventoryColor(Color.green));
@@ -29,8 +35,14 @@ namespace Services
             TryAdd(new InventoryColor(Color.white));
         }
 
+        private void InventoryItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ContentChanged.Invoke(InventoryItems);
+        }
+
         public void Uninitialize()
         {
+            InventoryItems.CollectionChanged -= InventoryItemsOnCollectionChanged;
             InventoryItems.Clear();
 
             InventoryItems = null;
@@ -66,8 +78,14 @@ namespace Services
                 return false;
             }
 
+            inventoryColor.InventoryColorChanged += InventoryColorChanged;
             InventoryItems.Add(inventoryColor);
             return true;
+        }
+
+        private void InventoryColorChanged(InventoryColor inventoryColor)
+        {
+            ContentChanged.Invoke(InventoryItems);
         }
 
         public bool TryRemove(IInventoryItem inventoryItem)
@@ -87,6 +105,11 @@ namespace Services
             if (!result)
             {
                 Debug.Log("Inventory do not contain this color");
+            }
+
+            if (result)
+            {
+                inventoryColor.InventoryColorChanged -= InventoryColorChanged;
             }
 
             return result;
