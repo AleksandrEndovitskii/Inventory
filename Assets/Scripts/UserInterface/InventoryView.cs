@@ -21,7 +21,30 @@ namespace UserInterface
 
         private List<InventoryItemView> _inventoryItemViewInstances;
 
-        public Color SelectedColor;
+        private IInventoryItem _selectedInventoryItem;
+        public IInventoryItem SelectedInventoryItem
+        {
+            get
+            {
+                return _selectedInventoryItem;
+            }
+            set
+            {
+                _selectedInventoryItem = value;
+
+                if (_selectedInventoryItem == null)
+                {
+                    selectedInventoryItemImage.gameObject.SetActive(false);
+                }
+                else
+                {
+                    selectedInventoryItemImage.gameObject.SetActive(true);
+                    selectedInventoryItemImage.color = ((InventoryColor)_selectedInventoryItem).Color; // TODO 
+                }
+            }
+        }
+
+        private Color _selectedColor;
 
         public void Initialize()
         {
@@ -39,17 +62,31 @@ namespace UserInterface
 
         public void OnAddColorButtonClick()
         {
-            GameManager.Instance.InventoryService.Add(new InventoryColor(SelectedColor));
+            var inventoryItemAddedToInventoryService = GameManager.Instance.InventoryService.TryAdd(SelectedInventoryItem);
+            if (inventoryItemAddedToInventoryService)
+            {
+                SelectedInventoryItem = null; // unselect selected inventory item
+            }
         }
 
         public void OnRemoveColorButtonClick()
         {
-            GameManager.Instance.InventoryService.Remove(new InventoryColor(SelectedColor));
+            var inventoryItemRemovedFromInventoryService = GameManager.Instance.InventoryService.TryRemove(SelectedInventoryItem);
+            if (inventoryItemRemovedFromInventoryService)
+            {
+                SelectedInventoryItem = null; // unselect selected inventory item
+            }
         }
 
         public void OnSaveColorButtonClick()
         {
-
+            // TODO: work stopped here - resume a implementing of saving changed color
+            //((InventoryColor)SelectedInventoryItem).Color = _selectedColor;
+            var selectedInventoryItemChangedColor = ((InventoryColor)SelectedInventoryItem).TryChangeColor(_selectedColor);
+            if (selectedInventoryItemChangedColor)
+            {
+                SelectedInventoryItem = null; // unselect selected inventory item
+            }
         }
 
         //TODO: re-implement with more arguments
@@ -57,14 +94,13 @@ namespace UserInterface
         {
             var instance = Instantiate(inventoryItemViewPrefab, inventoryItemsContainer);
             instance.Initialize(inventoryItem);
-            instance.WasSelected += WasSelected;
+            instance.WasClicked += WasClicked;
             _inventoryItemViewInstances.Add(instance);
         }
 
-        private void WasSelected(InventoryItemView inventoryItemView)
+        private void WasClicked(InventoryItemView inventoryItemView)
         {
-            selectedInventoryItemImage.gameObject.SetActive(true);
-            selectedInventoryItemImage.color = ((InventoryColor)inventoryItemView.InventoryItem).Color; // TODO
+            SelectedInventoryItem = inventoryItemView.InventoryItem;
         }
 
         private void CreateContent()
