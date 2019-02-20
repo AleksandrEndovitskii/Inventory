@@ -8,7 +8,7 @@ namespace UserInterface
 {
     public class InventoryItemView : MonoBehaviour //,IInitializable, IUninitializable
     {
-        public Action<InventoryItemView> WasSelected = delegate { };
+        public Action<InventoryItemView> WasClicked = delegate { };
 
         [SerializeField]
         private Image image;
@@ -34,7 +34,9 @@ namespace UserInterface
 
         public void OnClick()
         {
-            WasSelected.Invoke(this);
+            Debug.Log("WasClicked " + ((InventoryColor)this.InventoryItem).Color);
+
+            WasClicked.Invoke(this);
         }
     }
 }
