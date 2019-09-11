@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using InventoryItems;
 using Managers;
 using UnityEngine;
@@ -25,36 +26,6 @@ namespace UserInterface
 
         private List<InventoryItemView> _inventoryItemViewInstances;
 
-        private IInventoryItem _selectedInventoryItem;
-        public IInventoryItem SelectedInventoryItem
-        {
-            get
-            {
-                return _selectedInventoryItem;
-            }
-            set
-            {
-                _selectedInventoryItem = value;
-
-                if (_selectedInventoryItem == null)
-                {
-                    selectedInventoryItemImage.gameObject.SetActive(false);
-                    selectedColorInputField.gameObject.SetActive(false);
-                }
-                else
-                {
-                    selectedInventoryItemImage.gameObject.SetActive(true);
-                    selectedInventoryItemImage.color = ((InventoryColor)_selectedInventoryItem).Color; // TODO
-
-                    selectedColorInputField.gameObject.SetActive(true);
-                    var hexString = ColorUtility.ToHtmlStringRGBA(selectedInventoryItemImage.color);
-                    selectedColorInputField.text = hexString;
-
-                    _selectedColor = selectedInventoryItemImage.color;
-                }
-            }
-        }
-
         private Color _selectedColor;
 
         public void Initialize()
@@ -62,11 +33,15 @@ namespace UserInterface
             CreateContent();
 
             GameManager.Instance.InventoryService.ContentChanged += InventoryItemsOnCollectionChanged;
+            GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItemChanged +=
+                InventoryItemSelectionServiceOnSelectedInventoryItemChanged;
         }
 
         public void Uninitialize()
         {
             GameManager.Instance.InventoryService.ContentChanged -= InventoryItemsOnCollectionChanged;
+            GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItemChanged -=
+                InventoryItemSelectionServiceOnSelectedInventoryItemChanged;
 
             ClearContent();
         }
@@ -97,34 +72,34 @@ namespace UserInterface
 
         public void OnAddColorButtonClick()
         {
-            var inventoryItemAddedToInventoryService = GameManager.Instance.InventoryService.TryAdd(SelectedInventoryItem);
+            var inventoryItemAddedToInventoryService = GameManager.Instance.InventoryService.TryAdd(GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem);
             if (inventoryItemAddedToInventoryService)
             {
-                SelectedInventoryItem = null; // unselect selected inventory item
+                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = null; // unselect selected inventory item
             }
         }
 
         public void OnRemoveColorButtonClick()
         {
-            var inventoryItemRemovedFromInventoryService = GameManager.Instance.InventoryService.TryRemove(SelectedInventoryItem);
+            var inventoryItemRemovedFromInventoryService = GameManager.Instance.InventoryService.TryRemove(GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem);
             if (inventoryItemRemovedFromInventoryService)
             {
-                SelectedInventoryItem = null; // unselect selected inventory item
+                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = null; // unselect selected inventory item
             }
         }
 
         public void OnSaveColorButtonClick()
         {
             // TODO: test demo implementation - add correct implementation in future
-            _selectedColor = ((InventoryColor)SelectedInventoryItem).Color;
+            _selectedColor = ((InventoryColor)GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).Color;
             _selectedColor = new Color((_selectedColor.r + 0.1f) % 1, _selectedColor.g, _selectedColor.b, _selectedColor.a);
             Debug.Log("Trying to save selected color " + _selectedColor);
-            Debug.Log("To replace  " + ((InventoryColor)SelectedInventoryItem).Color);
+            Debug.Log("To replace  " + ((InventoryColor)GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).Color);
             //((InventoryColor)SelectedInventoryItem).Color = _selectedColor;
-            var selectedInventoryItemChangedColor = ((InventoryColor)SelectedInventoryItem).TryChangeColor(_selectedColor);
+            var selectedInventoryItemChangedColor = ((InventoryColor)GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).TryChangeColor(_selectedColor);
             if (selectedInventoryItemChangedColor)
             {
-                SelectedInventoryItem = null; // unselect selected inventory item
+                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = null; // unselect selected inventory item
             }
         }
 
@@ -139,7 +114,7 @@ namespace UserInterface
 
         private void WasClicked(InventoryItemView inventoryItemView)
         {
-            SelectedInventoryItem = inventoryItemView.InventoryItem;
+            GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = inventoryItemView.InventoryItem;
         }
 
         private void CreateContent()
@@ -171,6 +146,26 @@ namespace UserInterface
             //TODO: not optimized
             ClearContent();
             CreateContent();
+        }
+
+        private void InventoryItemSelectionServiceOnSelectedInventoryItemChanged(IInventoryItem inventoryItem)
+        {
+            if (inventoryItem == null)
+            {
+                selectedInventoryItemImage.gameObject.SetActive(false);
+                selectedColorInputField.gameObject.SetActive(false);
+            }
+            else
+            {
+                selectedInventoryItemImage.gameObject.SetActive(true);
+                selectedInventoryItemImage.color = ((InventoryColor)inventoryItem).Color; // TODO
+
+                selectedColorInputField.gameObject.SetActive(true);
+                var hexString = ColorUtility.ToHtmlStringRGBA(selectedInventoryItemImage.color);
+                selectedColorInputField.text = hexString;
+
+                _selectedColor = selectedInventoryItemImage.color;
+            }
         }
     }
 }

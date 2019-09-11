@@ -20,6 +20,7 @@ namespace Managers
         }
 
         public InventoryService InventoryService = new InventoryService();
+        public InventoryItemSelectionService InventoryItemSelectionService = new InventoryItemSelectionService();
 
         private void Awake()
         {
@@ -46,6 +47,7 @@ namespace Managers
         public void Initialize()
         {
             InventoryService.Initialize();
+            InventoryItemSelectionService.Initialize();
 
             UserInterfaceManager.Initialize();
         }
@@ -54,6 +56,7 @@ namespace Managers
         {
             UserInterfaceManager.Uninitialize();
 
+            InventoryItemSelectionService.Uninitialize();
             InventoryService.Uninitialize();
         }
 
