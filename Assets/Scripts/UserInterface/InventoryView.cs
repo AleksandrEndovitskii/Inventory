@@ -8,13 +8,11 @@ using Utilities;
 
 namespace UserInterface
 {
-    public class InventoryView : MonoBehaviour ,IInitializable, IUninitializable
+    public class InventoryView : MonoBehaviour, IInitializable, IUninitializable
     {
         [SerializeField]
         private RectTransform inventoryItemsContainer;
 
-        [SerializeField]
-        private Image selectedInventoryItemImage;
         [SerializeField]
         private InputField selectedColorInputField;
 
@@ -25,8 +23,6 @@ namespace UserInterface
         private InventoryItemView inventoryItemViewPrefab;
 
         private List<InventoryItemView> _inventoryItemViewInstances;
-
-        private Color _selectedColor;
 
         public void Initialize()
         {
@@ -53,11 +49,13 @@ namespace UserInterface
 
         public void OnSelectedColorInputFieldEndEdit(string hexString)
         {
-            var color = selectedInventoryItemImage.color;
+            var color = ((InventoryColor) GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem)
+                .Color;
             ColorUtility.TryParseHtmlString(hexString, out color);
 
             // nothing changed
-            if (color == selectedInventoryItemImage.color)
+            if (color == ((InventoryColor) GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem)
+                .Color)
             {
                 saveColorButton.interactable = false;
 
@@ -66,40 +64,55 @@ namespace UserInterface
 
             saveColorButton.interactable = true;
 
-            selectedInventoryItemImage.color = color;
-            _selectedColor = selectedInventoryItemImage.color;
+            GameManager.Instance.ColorSelectionService.SelectedColor = color;
         }
 
         public void OnAddColorButtonClick()
         {
-            var inventoryItemAddedToInventoryService = GameManager.Instance.InventoryService.TryAdd(GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem);
+            var inventoryItemAddedToInventoryService =
+                GameManager.Instance.InventoryService.TryAdd(GameManager.Instance.InventoryItemSelectionService
+                    .SelectedInventoryItem);
             if (inventoryItemAddedToInventoryService)
             {
-                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = null; // unselect selected inventory item
+                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem =
+                    null; // unselect selected inventory item
             }
         }
 
         public void OnRemoveColorButtonClick()
         {
-            var inventoryItemRemovedFromInventoryService = GameManager.Instance.InventoryService.TryRemove(GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem);
+            var inventoryItemRemovedFromInventoryService =
+                GameManager.Instance.InventoryService.TryRemove(GameManager.Instance.InventoryItemSelectionService
+                    .SelectedInventoryItem);
             if (inventoryItemRemovedFromInventoryService)
             {
-                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = null; // unselect selected inventory item
+                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem =
+                    null; // unselect selected inventory item
             }
         }
 
         public void OnSaveColorButtonClick()
         {
             // TODO: test demo implementation - add correct implementation in future
-            _selectedColor = ((InventoryColor)GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).Color;
-            _selectedColor = new Color((_selectedColor.r + 0.1f) % 1, _selectedColor.g, _selectedColor.b, _selectedColor.a);
-            Debug.Log("Trying to save selected color " + _selectedColor);
-            Debug.Log("To replace  " + ((InventoryColor)GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).Color);
+            GameManager.Instance.ColorSelectionService.SelectedColor =
+                ((InventoryColor) GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).Color;
+            GameManager.Instance.ColorSelectionService.SelectedColor = new Color(
+                (GameManager.Instance.ColorSelectionService.SelectedColor.r + 0.1f) % 1,
+                GameManager.Instance.ColorSelectionService.SelectedColor.g,
+                GameManager.Instance.ColorSelectionService.SelectedColor.b,
+                GameManager.Instance.ColorSelectionService.SelectedColor.a);
+            Debug.Log("Trying to save selected color " + GameManager.Instance.ColorSelectionService.SelectedColor);
+            Debug.Log("To replace  " +
+                      ((InventoryColor) GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem)
+                      .Color);
             //((InventoryColor)SelectedInventoryItem).Color = _selectedColor;
-            var selectedInventoryItemChangedColor = ((InventoryColor)GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem).TryChangeColor(_selectedColor);
+            var selectedInventoryItemChangedColor =
+                ((InventoryColor) GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem)
+                .TryChangeColor(GameManager.Instance.ColorSelectionService.SelectedColor);
             if (selectedInventoryItemChangedColor)
             {
-                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = null; // unselect selected inventory item
+                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem =
+                    null; // unselect selected inventory item
             }
         }
 
@@ -119,7 +132,6 @@ namespace UserInterface
 
         private void CreateContent()
         {
-            selectedInventoryItemImage.gameObject.SetActive(false);
             saveColorButton.interactable = false;
 
             _inventoryItemViewInstances = new List<InventoryItemView>();
@@ -152,19 +164,15 @@ namespace UserInterface
         {
             if (inventoryItem == null)
             {
-                selectedInventoryItemImage.gameObject.SetActive(false);
                 selectedColorInputField.gameObject.SetActive(false);
             }
             else
             {
-                selectedInventoryItemImage.gameObject.SetActive(true);
-                selectedInventoryItemImage.color = ((InventoryColor)inventoryItem).Color; // TODO
-
                 selectedColorInputField.gameObject.SetActive(true);
-                var hexString = ColorUtility.ToHtmlStringRGBA(selectedInventoryItemImage.color);
+                var hexString = ColorUtility.ToHtmlStringRGBA(((InventoryColor) inventoryItem).Color);
                 selectedColorInputField.text = hexString;
 
-                _selectedColor = selectedInventoryItemImage.color;
+                GameManager.Instance.ColorSelectionService.SelectedColor = ((InventoryColor) inventoryItem).Color;
             }
         }
     }
