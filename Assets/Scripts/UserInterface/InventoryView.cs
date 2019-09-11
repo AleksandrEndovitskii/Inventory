@@ -14,6 +14,11 @@ namespace UserInterface
 
         [SerializeField]
         private Image selectedInventoryItemImage;
+        [SerializeField]
+        private InputField selectedColorInputField;
+
+        [SerializeField]
+        private Button saveColorButton;
 
         [SerializeField]
         private InventoryItemView inventoryItemViewPrefab;
@@ -34,11 +39,18 @@ namespace UserInterface
                 if (_selectedInventoryItem == null)
                 {
                     selectedInventoryItemImage.gameObject.SetActive(false);
+                    selectedColorInputField.gameObject.SetActive(false);
                 }
                 else
                 {
                     selectedInventoryItemImage.gameObject.SetActive(true);
-                    selectedInventoryItemImage.color = ((InventoryColor)_selectedInventoryItem).Color; // TODO 
+                    selectedInventoryItemImage.color = ((InventoryColor)_selectedInventoryItem).Color; // TODO
+
+                    selectedColorInputField.gameObject.SetActive(true);
+                    var hexString = ColorUtility.ToHtmlStringRGBA(selectedInventoryItemImage.color);
+                    selectedColorInputField.text = hexString;
+
+                    _selectedColor = selectedInventoryItemImage.color;
                 }
             }
         }
@@ -57,6 +69,30 @@ namespace UserInterface
             GameManager.Instance.InventoryService.ContentChanged -= InventoryItemsOnCollectionChanged;
 
             ClearContent();
+        }
+
+        public void OnSelectedColorInputFieldValueChanged(string hexString)
+        {
+
+        }
+
+        public void OnSelectedColorInputFieldEndEdit(string hexString)
+        {
+            var color = selectedInventoryItemImage.color;
+            ColorUtility.TryParseHtmlString(hexString, out color);
+
+            // nothing changed
+            if (color == selectedInventoryItemImage.color)
+            {
+                saveColorButton.interactable = false;
+
+                return;
+            }
+
+            saveColorButton.interactable = true;
+
+            selectedInventoryItemImage.color = color;
+            _selectedColor = selectedInventoryItemImage.color;
         }
 
         public void OnAddColorButtonClick()
@@ -109,6 +145,7 @@ namespace UserInterface
         private void CreateContent()
         {
             selectedInventoryItemImage.gameObject.SetActive(false);
+            saveColorButton.interactable = false;
 
             _inventoryItemViewInstances = new List<InventoryItemView>();
 
