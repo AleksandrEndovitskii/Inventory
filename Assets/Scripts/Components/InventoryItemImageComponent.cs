@@ -5,24 +5,21 @@ using UnityEngine.UI;
 
 namespace UserInterface
 {
-    public class InventoryItemView : MonoBehaviour
+    [RequireComponent(typeof(Image))]
+    public class InventoryItemImageComponent : MonoBehaviour
     {
-#pragma warning disable 0649
-        [SerializeField]
         private Image _image;
-#pragma warning restore 0649
 
         public IInventoryItem InventoryItem;
 
-        public void Initialize(IInventoryItem inventoryItem)
+        private void Awake()
         {
-            this.InventoryItem = inventoryItem;
+            _image = this.gameObject.GetComponent<Image>();
 
-            Redraw();
-        }
-
-        public void Redraw()
-        {
+            if (InventoryItem == null)
+            {
+                return;
+            }
             _image.color = ((InventoryColor)InventoryItem).Color; //TODO
         }
 

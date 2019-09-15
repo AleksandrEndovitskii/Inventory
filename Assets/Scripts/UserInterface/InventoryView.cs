@@ -20,9 +20,9 @@ namespace UserInterface
         private Button _saveColorButton;
 
         [SerializeField]
-        private InventoryItemView _inventoryItemViewPrefab;
+        private InventoryItemImageComponent _inventoryItemImageComponentPrefab;
 
-        private List<InventoryItemView> _inventoryItemViewInstances;
+        private List<InventoryItemImageComponent> _inventoryItemImageComponentInstances;
 #pragma warning restore 0649
 
         public void Initialize()
@@ -120,16 +120,16 @@ namespace UserInterface
         //TODO: re-implement with more arguments
         private void InstantiateElement(IInventoryItem inventoryItem)
         {
-            var instance = Instantiate(_inventoryItemViewPrefab, _inventoryItemsContainer);
-            instance.Initialize(inventoryItem);
-            _inventoryItemViewInstances.Add(instance);
+            var instance = Instantiate(_inventoryItemImageComponentPrefab, _inventoryItemsContainer);
+            instance.InventoryItem = inventoryItem;
+            _inventoryItemImageComponentInstances.Add(instance);
         }
 
         private void CreateContent()
         {
             _saveColorButton.interactable = false;
 
-            _inventoryItemViewInstances = new List<InventoryItemView>();
+            _inventoryItemImageComponentInstances = new List<InventoryItemImageComponent>();
 
             foreach (var inventoryItem in GameManager.Instance.InventoryService.InventoryItems)
             {
@@ -139,13 +139,13 @@ namespace UserInterface
 
         private void ClearContent()
         {
-            foreach (var inventoryItemViewInstance in _inventoryItemViewInstances)
+            foreach (var inventoryItemViewInstance in _inventoryItemImageComponentInstances)
             {
                 Destroy(inventoryItemViewInstance.gameObject);
             }
 
-            _inventoryItemViewInstances.Clear();
-            _inventoryItemViewInstances = null; // TODO: do not required?
+            _inventoryItemImageComponentInstances.Clear();
+            _inventoryItemImageComponentInstances = null; // TODO: do not required?
         }
 
         private void InventoryItemsOnCollectionChanged(IEnumerable<IInventoryItem> inventoryItems)

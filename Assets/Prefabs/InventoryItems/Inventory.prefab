@@ -720,7 +720,7 @@ MonoBehaviour:
   _inventoryItemsContainer: {fileID: 1850665771201713406}
   _selectedColorInputField: {fileID: 3619629846723190074}
   _saveColorButton: {fileID: 7396615754892768886}
-  _inventoryItemViewPrefab: {fileID: 1226147707591747821, guid: 791f052fd2445e74487e308122c24299,
+  _inventoryItemImageComponentPrefab: {fileID: 1226147707591747821, guid: 791f052fd2445e74487e308122c24299,
     type: 3}
 --- !u!1 &7396615756407368389
 GameObject:
