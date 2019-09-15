@@ -1,11 +1,10 @@
 ﻿using System;
 using InventoryItems;
 using UnityEngine;
-using Utilities;
 
 namespace Services
 {
-    public class InventoryItemSelectionService : IInitializable, IUninitializable
+    public class InventoryItemSelectionService
     {
         public Action<IInventoryItem> SelectedInventoryItemChanged = delegate { };
 
@@ -30,15 +29,6 @@ namespace Services
 
                 SelectedInventoryItemChanged.Invoke(_selectedInventoryItem);
             }
-        }
-
-        public void Initialize()
-        {
-
-        }
-        public void Uninitialize()
-        {
-
         }
     }
 }

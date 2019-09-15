@@ -1,10 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using Utilities;
 
 namespace Services
 {
-    public class ColorSelectionService : IInitializable, IUninitializable
+    public class ColorSelectionService
     {
         public Action<Color> SelectedColorChanged = delegate { };
 
@@ -29,15 +28,6 @@ namespace Services
 
                 SelectedColorChanged.Invoke(_selectedColor);
             }
-        }
-
-        public void Initialize()
-        {
-
-        }
-        public void Uninitialize()
-        {
-
         }
     }
 }

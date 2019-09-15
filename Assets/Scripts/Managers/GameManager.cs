@@ -48,25 +48,14 @@ namespace Managers
         public void Initialize()
         {
             InventoryService.Initialize();
-            InventoryItemSelectionService.Initialize();
-            ColorSelectionService.Initialize();
 
             UserInterfaceManager.Initialize();
         }
-
         public void Uninitialize()
         {
             UserInterfaceManager.Uninitialize();
 
-            ColorSelectionService.Uninitialize();
-            InventoryItemSelectionService.Uninitialize();
             InventoryService.Uninitialize();
-        }
-
-        public void Reinitialize()
-        {
-            Uninitialize();
-            Initialize();
         }
     }
 }
