@@ -14,18 +14,17 @@ namespace Components
         {
             _selectedInventoryItemImage = this.gameObject.GetComponent<Image>();
 
-            InventoryItemSelectionServiceOnSelectedInventoryItemChanged(
-                GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem);
+            OnSelectedInventoryItemChanged(GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem);
             GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItemChanged +=
-                InventoryItemSelectionServiceOnSelectedInventoryItemChanged;
+                OnSelectedInventoryItemChanged;
         }
         private void OnDestroy()
         {
             GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItemChanged -=
-                InventoryItemSelectionServiceOnSelectedInventoryItemChanged;
+                OnSelectedInventoryItemChanged;
         }
 
-        private void InventoryItemSelectionServiceOnSelectedInventoryItemChanged(IInventoryItem inventoryItem)
+        private void OnSelectedInventoryItemChanged(IInventoryItem inventoryItem)
         {
             if (inventoryItem == null)
             {
