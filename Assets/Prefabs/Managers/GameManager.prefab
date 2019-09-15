@@ -56,3 +56,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51ca672072cbddf498d1a0ad2bf00fab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvas: {fileID: 0}
+  _inventoryViewPrefab: {fileID: 7396615755700661636, guid: 0fca622d8af781044ad2ccb5a806142c,
+    type: 3}

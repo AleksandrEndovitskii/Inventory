@@ -10,8 +10,10 @@ namespace UserInterface
     {
         public Action<InventoryItemView> WasClicked = delegate { };
 
+#pragma warning disable 0649
         [SerializeField]
-        private Image image;
+        private Image _image;
+#pragma warning restore 0649
 
         public IInventoryItem InventoryItem;
 
@@ -24,7 +26,7 @@ namespace UserInterface
 
         public void Redraw()
         {
-            image.color = ((InventoryColor)InventoryItem).Color; //TODO
+            _image.color = ((InventoryColor)InventoryItem).Color; //TODO
         }
 
         public void Uninitialize()

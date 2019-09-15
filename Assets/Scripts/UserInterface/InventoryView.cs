@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using InventoryItems;
 using Managers;
 using UnityEngine;
@@ -10,19 +9,21 @@ namespace UserInterface
 {
     public class InventoryView : MonoBehaviour, IInitializable, IUninitializable
     {
+#pragma warning disable 0649
         [SerializeField]
-        private RectTransform inventoryItemsContainer;
+        private RectTransform _inventoryItemsContainer;
 
         [SerializeField]
-        private InputField selectedColorInputField;
+        private InputField _selectedColorInputField;
 
         [SerializeField]
-        private Button saveColorButton;
+        private Button _saveColorButton;
 
         [SerializeField]
-        private InventoryItemView inventoryItemViewPrefab;
+        private InventoryItemView _inventoryItemViewPrefab;
 
         private List<InventoryItemView> _inventoryItemViewInstances;
+#pragma warning restore 0649
 
         public void Initialize()
         {
@@ -57,12 +58,12 @@ namespace UserInterface
             if (color == ((InventoryColor) GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem)
                 .Color)
             {
-                saveColorButton.interactable = false;
+                _saveColorButton.interactable = false;
 
                 return;
             }
 
-            saveColorButton.interactable = true;
+            _saveColorButton.interactable = true;
 
             GameManager.Instance.ColorSelectionService.SelectedColor = color;
         }
@@ -119,7 +120,7 @@ namespace UserInterface
         //TODO: re-implement with more arguments
         private void InstantiateElement(IInventoryItem inventoryItem)
         {
-            var instance = Instantiate(inventoryItemViewPrefab, inventoryItemsContainer);
+            var instance = Instantiate(_inventoryItemViewPrefab, _inventoryItemsContainer);
             instance.Initialize(inventoryItem);
             instance.WasClicked += WasClicked;
             _inventoryItemViewInstances.Add(instance);
@@ -132,7 +133,7 @@ namespace UserInterface
 
         private void CreateContent()
         {
-            saveColorButton.interactable = false;
+            _saveColorButton.interactable = false;
 
             _inventoryItemViewInstances = new List<InventoryItemView>();
 
@@ -164,13 +165,13 @@ namespace UserInterface
         {
             if (inventoryItem == null)
             {
-                selectedColorInputField.gameObject.SetActive(false);
+                _selectedColorInputField.gameObject.SetActive(false);
             }
             else
             {
-                selectedColorInputField.gameObject.SetActive(true);
+                _selectedColorInputField.gameObject.SetActive(true);
                 var hexString = ColorUtility.ToHtmlStringRGBA(((InventoryColor) inventoryItem).Color);
-                selectedColorInputField.text = hexString;
+                _selectedColorInputField.text = hexString;
 
                 GameManager.Instance.ColorSelectionService.SelectedColor = ((InventoryColor) inventoryItem).Color;
             }

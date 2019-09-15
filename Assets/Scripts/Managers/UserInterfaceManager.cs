@@ -6,17 +6,19 @@ namespace Managers
 {
     public class UserInterfaceManager : MonoBehaviour, IInitializable, IUninitializable
     {
+#pragma warning disable 0649
         [SerializeField]
-        private Canvas canvas;
+        private Canvas _canvas;
 
         [SerializeField]
-        private InventoryView inventoryViewPrefab;
+        private InventoryView _inventoryViewPrefab;
 
         private InventoryView _inventoryViewInstance;
+#pragma warning restore 0649
 
         public void Initialize()
         {
-            _inventoryViewInstance = Instantiate(inventoryViewPrefab, canvas.transform);
+            _inventoryViewInstance = Instantiate(_inventoryViewPrefab, _canvas.transform);
             _inventoryViewInstance.Initialize();
         }
 
