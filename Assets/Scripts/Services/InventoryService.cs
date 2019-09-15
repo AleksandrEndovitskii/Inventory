@@ -34,12 +34,6 @@ namespace Services
             TryAdd(new InventoryColor(Color.white));
             TryAdd(new InventoryColor(Color.white));
         }
-
-        private void InventoryItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            ContentChanged.Invoke(InventoryItems);
-        }
-
         public void Uninitialize()
         {
             InventoryItems.CollectionChanged -= InventoryItemsOnCollectionChanged;
@@ -57,7 +51,6 @@ namespace Services
 
             return false; // TODO
         }
-
         public bool TryAdd(InventoryColor inventoryColor)
         {
             Debug.Log("Trying to add " + inventoryColor.Color + "to inventory");
@@ -83,11 +76,6 @@ namespace Services
             return true;
         }
 
-        private void InventoryColorChanged(InventoryColor inventoryColor)
-        {
-            ContentChanged.Invoke(InventoryItems);
-        }
-
         public bool TryRemove(IInventoryItem inventoryItem)
         {
             if (inventoryItem is InventoryColor inventoryColor)
@@ -97,7 +85,6 @@ namespace Services
 
             return false; // TODO
         }
-
         public bool TryRemove(InventoryColor inventoryColor)
         {
             var result = InventoryItems.Remove(inventoryColor);
@@ -113,6 +100,16 @@ namespace Services
             }
 
             return result;
+        }
+
+        private void InventoryColorChanged(InventoryColor inventoryColor)
+        {
+            ContentChanged.Invoke(InventoryItems);
+        }
+
+        private void InventoryItemsOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            ContentChanged.Invoke(InventoryItems);
         }
     }
 }
