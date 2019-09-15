@@ -1,15 +1,12 @@
-﻿using System;
-using InventoryItems;
+﻿using InventoryItems;
+using Managers;
 using UnityEngine;
 using UnityEngine.UI;
-//using Utilities;
 
 namespace UserInterface
 {
-    public class InventoryItemView : MonoBehaviour //,IInitializable, IUninitializable
+    public class InventoryItemView : MonoBehaviour
     {
-        public Action<InventoryItemView> WasClicked = delegate { };
-
 #pragma warning disable 0649
         [SerializeField]
         private Image _image;
@@ -29,16 +26,11 @@ namespace UserInterface
             _image.color = ((InventoryColor)InventoryItem).Color; //TODO
         }
 
-        public void Uninitialize()
-        {
-            //
-        }
-
         public void OnClick()
         {
             Debug.Log("WasClicked " + ((InventoryColor)this.InventoryItem).Color);
 
-            WasClicked.Invoke(this);
+            GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = InventoryItem;
         }
     }
 }

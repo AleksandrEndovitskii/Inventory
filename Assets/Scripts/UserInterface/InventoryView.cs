@@ -122,13 +122,7 @@ namespace UserInterface
         {
             var instance = Instantiate(_inventoryItemViewPrefab, _inventoryItemsContainer);
             instance.Initialize(inventoryItem);
-            instance.WasClicked += WasClicked;
             _inventoryItemViewInstances.Add(instance);
-        }
-
-        private void WasClicked(InventoryItemView inventoryItemView)
-        {
-            GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = inventoryItemView.InventoryItem;
         }
 
         private void CreateContent()
