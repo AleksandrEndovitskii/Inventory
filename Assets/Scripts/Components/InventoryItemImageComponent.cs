@@ -1,33 +1,36 @@
 ﻿using InventoryItems;
-using Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace UserInterface
+namespace Components
 {
-    [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(InventoryItemComponent))]
     public class InventoryItemImageComponent : MonoBehaviour
     {
+        private InventoryItemComponent _inventoryItemComponent;
         private Image _image;
-
-        public IInventoryItem InventoryItem;
 
         private void Awake()
         {
+            _inventoryItemComponent = this.gameObject.GetComponent<InventoryItemComponent>();
             _image = this.gameObject.GetComponent<Image>();
 
-            if (InventoryItem == null)
+            InventoryItemChanged(_inventoryItemComponent.InventoryItem);
+            _inventoryItemComponent.InventoryItemChanged += InventoryItemChanged;
+        }
+        private void OnDestroy()
+        {
+            _inventoryItemComponent.InventoryItemChanged -= InventoryItemChanged;
+        }
+
+        private void InventoryItemChanged(IInventoryItem inventoryItem)
+        {
+            if (inventoryItem == null)
             {
                 return;
             }
-            _image.color = ((InventoryColor)InventoryItem).Color; //TODO
-        }
 
-        public void OnClick()
-        {
-            Debug.Log("WasClicked " + ((InventoryColor)this.InventoryItem).Color);
-
-            GameManager.Instance.InventoryItemSelectionService.SelectedInventoryItem = InventoryItem;
+            _image.color = ((InventoryColor)inventoryItem).Color; //TODO
         }
     }
 }

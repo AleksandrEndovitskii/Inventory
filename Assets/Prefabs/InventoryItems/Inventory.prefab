@@ -720,7 +720,7 @@ MonoBehaviour:
   _inventoryItemsContainer: {fileID: 1850665771201713406}
   _selectedColorInputField: {fileID: 3619629846723190074}
   _saveColorButton: {fileID: 7396615754892768886}
-  _inventoryItemImageComponentPrefab: {fileID: 1226147707591747821, guid: 791f052fd2445e74487e308122c24299,
+  _inventoryItemComponentPrefab: {fileID: -7592376895282415433, guid: 791f052fd2445e74487e308122c24299,
     type: 3}
 --- !u!1 &7396615756407368389
 GameObject:
@@ -1246,7 +1246,7 @@ PrefabInstance:
     - target: {fileID: 4697254108050473414, guid: 791f052fd2445e74487e308122c24299,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4697254108050473414, guid: 791f052fd2445e74487e308122c24299,
         type: 3}
@@ -1254,7 +1254,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 1226147707591747821, guid: 791f052fd2445e74487e308122c24299, type: 3}
+    - {fileID: 1172018570784928199, guid: 791f052fd2445e74487e308122c24299, type: 3}
+    - {fileID: 4697254108050473414, guid: 791f052fd2445e74487e308122c24299, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 791f052fd2445e74487e308122c24299, type: 3}
 --- !u!224 &3075448937682626022 stripped
 RectTransform:
