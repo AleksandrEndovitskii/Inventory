@@ -25,15 +25,9 @@ namespace Components
 
         private void OnSelectedInventoryItemChanged(IInventoryItem inventoryItem)
         {
-            if (inventoryItem == null)
-            {
-                _inventoryItemComponent.gameObject.SetActive(false);
-            }
-            else
-            {
-                _inventoryItemComponent.gameObject.SetActive(true);
-                _inventoryItemComponent.InventoryItem = inventoryItem;
-            }
+            _inventoryItemComponent.InventoryItem = inventoryItem;
+
+            _inventoryItemComponent.gameObject.SetActive(inventoryItem != null);
         }
     }
 }
