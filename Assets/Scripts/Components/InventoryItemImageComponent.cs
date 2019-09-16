@@ -5,6 +5,7 @@ using UnityEngine.UI;
 namespace Components
 {
     [RequireComponent(typeof(InventoryItemComponent))]
+    [RequireComponent(typeof(Image))]
     public class InventoryItemImageComponent : MonoBehaviour
     {
         private InventoryItemComponent _inventoryItemComponent;

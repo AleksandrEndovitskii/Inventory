@@ -5,6 +5,7 @@ using UnityEngine.UI;
 namespace Components
 {
     [RequireComponent(typeof(InventoryItemComponent))]
+    [RequireComponent(typeof(Button))]
     public class SelectedInventoryItemSetterButtonComponent : MonoBehaviour
     {
         private InventoryItemComponent _inventoryItemComponent;
